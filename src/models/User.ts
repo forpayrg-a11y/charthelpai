@@ -17,6 +17,8 @@ const UserSchema: Schema = new Schema(
         name: { type: String, required: true },
         image: { type: String },
         plan: { type: String, enum: ["free", "pro"], default: "free" },
+        stripeCustomerId: { type: String },
+        stripeSubscriptionId: { type: String },
     },
     { timestamps: true }
 );
