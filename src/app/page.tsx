@@ -49,17 +49,31 @@ export default function Home() {
       }
     };
     syncUser();
+
+    // Check for Stripe redirect status
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("success")) {
+      // In a real app, you might show a success toast here
+      console.log("Subscription successful!");
+    }
+    if (query.get("canceled")) {
+      console.log("Subscription canceled.");
+    }
   }, []);
 
   const handleUpgrade = async () => {
+    if (isPro) return; // Already Pro
+
     try {
-      const response = await fetch("/api/user/upgrade", { method: "POST" });
+      const response = await fetch("/api/checkout", { method: "POST" });
       if (response.ok) {
-        const data = await response.json();
-        setIsPro(data.plan === "pro");
+        const { url } = await response.json();
+        if (url) {
+          window.location.href = url;
+        }
       }
     } catch (error) {
-      console.error("Error upgrading user:", error);
+      console.error("Error initiating checkout:", error);
     }
   };
 
