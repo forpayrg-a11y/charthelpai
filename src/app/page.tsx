@@ -1,22 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
+  BrainCircuit,
+  Settings,
+  Zap,
   LayoutDashboard,
   History,
-  Settings,
+  LineChart,
   Search,
   Bell,
-  User,
-  TrendingUp,
-  LineChart,
-  BrainCircuit,
   Sparkles
 } from "lucide-react";
 import { ChartUpload } from "@/components/chart-upload";
 import { AnalysisCard } from "@/components/analysis-card";
 import { TradePlan } from "@/components/trade-plan";
 import { AnalysisChart } from "@/components/analysis-chart";
+import { WhaleAlerts } from "@/components/whale-alerts";
 import { cn } from "@/lib/utils";
 import { AnalysisResult } from "@/lib/gemini";
 import {
@@ -31,7 +31,37 @@ import { ProGate } from "@/components/pro-gate";
 
 export default function Home() {
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
-  const [isPro, setIsPro] = useState(false); // Mock PRO state for demonstration
+  const [isPro, setIsPro] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const syncUser = async () => {
+      try {
+        const response = await fetch("/api/user/sync", { method: "POST" });
+        if (response.ok) {
+          const data = await response.json();
+          setIsPro(data.plan === "pro");
+        }
+      } catch (error) {
+        console.error("Error syncing user:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    syncUser();
+  }, []);
+
+  const handleUpgrade = async () => {
+    try {
+      const response = await fetch("/api/user/upgrade", { method: "POST" });
+      if (response.ok) {
+        const data = await response.json();
+        setIsPro(data.plan === "pro");
+      }
+    } catch (error) {
+      console.error("Error upgrading user:", error);
+    }
+  };
 
   const handleAnalysisComplete = (result: AnalysisResult) => {
     setAnalysis(result);
@@ -75,7 +105,7 @@ export default function Home() {
             </div>
             <p className="text-[10px] text-foreground/50 leading-tight font-medium">Unlock harmonic patterns & whale alerts.</p>
             <button
-              onClick={() => setIsPro(!isPro)}
+              onClick={handleUpgrade}
               className="w-full mt-4 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold py-3 rounded-xl transition-all border border-white/5"
             >
               {isPro ? "Current: PRO" : "Upgrade Now"}
@@ -209,6 +239,10 @@ export default function Home() {
                   <p className="text-sm font-bold uppercase tracking-widest">Execute AI Scan <br /> to see Plan</p>
                 </div>
               )}
+
+              <ProGate isPro={isPro} featureName="Whale Alerts">
+                <WhaleAlerts />
+              </ProGate>
 
               <div className="glass-morphism p-6 space-y-4">
                 <h4 className="font-bold text-sm tracking-widest uppercase text-foreground/40">Quick Insights</h4>

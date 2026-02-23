@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, Lock } from "lucide-react";
-import { motion } from "framer-motion";
+import { Lock, Sparkles } from "lucide-react";
 
 interface ProGateProps {
     children: React.ReactNode;

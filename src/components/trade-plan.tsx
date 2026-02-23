@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { TrendingUp, Target, ShieldX, CheckCircle2 } from "lucide-react";
+import { TrendingDown, Target, ShieldX, CheckCircle2, Zap } from "lucide-react";
 
 interface Level {
     label: string;
@@ -51,4 +51,3 @@ export const TradePlan = ({ levels }: { levels: Level[] }) => {
     );
 };
 
-import { Zap } from "lucide-react";

@@ -5,21 +5,26 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 export const visionModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export interface AnalysisResult {
-    asset: string;
-    timeframe: string;
-    sentiment: "bullish" | "bearish" | "neutral";
-    confidence: number;
-    patterns: string[];
-    levels: {
-        entry: string;
-        sl: string;
-        tp: string[];
-    };
-    description: string;
+  asset: string;
+  timeframe: string;
+  sentiment: "bullish" | "bearish" | "neutral";
+  confidence: number;
+  patterns: string[];
+  levels: {
+    entry: string;
+    sl: string;
+    tp: string[];
+  };
+  harmonicData?: {
+    pattern: string;
+    completion: number;
+    potential: "reversal" | "continuation";
+  };
+  description: string;
 }
 
 export async function analyzeChartImage(imageBuffer: Buffer, mimeType: string): Promise<AnalysisResult> {
-    const prompt = `
+  const prompt = `
     Analyze this trading chart image. Provide a JSON response with the following structure:
     {
       "asset": "Asset name (e.g. BTC/USDT)",
@@ -32,25 +37,30 @@ export async function analyzeChartImage(imageBuffer: Buffer, mimeType: string): 
         "sl": "suggested stop loss",
         "tp": ["tp1", "tp2"]
       },
-      "description": "Short summary of findings"
+      "harmonicData": {
+        "pattern": "Gartley | Bat | Butterfly | Cypher (if detected)",
+        "completion": "Completion percentage (0-100)",
+        "potential": "reversal" | "continuation"
+      },
+      "description": "Short summary of findings including harmonic insights if applicable"
     }
     Only return the raw JSON.
   `;
 
-    const result = await visionModel.generateContent([
-        prompt,
-        {
-            inlineData: {
-                data: imageBuffer.toString("base64"),
-                mimeType
-            }
-        }
-    ]);
+  const result = await visionModel.generateContent([
+    prompt,
+    {
+      inlineData: {
+        data: imageBuffer.toString("base64"),
+        mimeType
+      }
+    }
+  ]);
 
-    const response = await result.response;
-    const text = response.text();
+  const response = await result.response;
+  const text = response.text();
 
-    // Basic cleanup of response in case AI includes markdown blocks
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    return JSON.parse(jsonMatch ? jsonMatch[0] : text);
+  // Basic cleanup of response in case AI includes markdown blocks
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  return JSON.parse(jsonMatch ? jsonMatch[0] : text);
 }
