@@ -239,12 +239,12 @@ export default function Home() {
             </div>
 
             <aside className="space-y-6">
-              {analysis ? (
+              {analysis?.levels ? (
                 <TradePlan
                   levels={[
                     { label: "Optimal Entry", price: analysis.levels.entry, type: "entry" },
                     { label: "Stop Loss", price: analysis.levels.sl, type: "sl" },
-                    ...analysis.levels.tp.map((price, i) => ({ label: `Take Profit ${i + 1}`, price, type: "tp" as const }))
+                    ...(analysis.levels.tp || []).map((price, i) => ({ label: `Take Profit ${i + 1}`, price, type: "tp" as const }))
                   ]}
                 />
               ) : (
