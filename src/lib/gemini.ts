@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { SYSTEM_CHART_PROMPT, buildUserPrompt } from "@/components/prompts";
+import { SYSTEM_TRADING_ANALYSIS_PROMPT, buildUserPrompt } from "@/components/prompts";
 
 const apiKey = process.env.GEMINI_API_KEY;
 if (!apiKey) {
@@ -10,7 +10,7 @@ const genAI = new GoogleGenerativeAI(apiKey || "");
 
 export const visionModel = genAI.getGenerativeModel({
   model: "gemini-2.5-flash",
-  systemInstruction: SYSTEM_CHART_PROMPT
+  systemInstruction: SYSTEM_TRADING_ANALYSIS_PROMPT
 });
 
 export interface AnalysisResult {
@@ -53,5 +53,28 @@ export async function analyzeChartImage(imageBuffer: Buffer, mimeType: string): 
 
   // Basic cleanup of response in case AI includes markdown blocks
   const jsonMatch = text.match(/\{[\s\S]*\}/);
-  return JSON.parse(jsonMatch ? jsonMatch[0] : text);
+  const rawJson = JSON.parse(jsonMatch ? jsonMatch[0] : text);
+
+  // Map the new structured response back to our AnalysisResult interface
+  return {
+    asset: rawJson.metadata?.asset || "Unknown",
+    timeframe: rawJson.metadata?.timeframe || "Unknown",
+    sentiment: rawJson.analysis?.sentiment || "neutral",
+    confidence: rawJson.analysis?.confidenceScore || 0,
+    patterns: rawJson.technicalFactors?.identifiedPatterns || [],
+    levels: {
+      entry: rawJson.technicalFactors?.keyLevels?.supportZones?.[0] || "N/A",
+      sl: "See Resistance", // Placeholder since new structure doesn't prioritize entry/sl as explicitly
+      tp: rawJson.technicalFactors?.keyLevels?.resistanceZones || [],
+    },
+    harmonicData: rawJson.technicalFactors?.harmonicData ? {
+      pattern: rawJson.technicalFactors.harmonicData.patternDetected,
+      completion: rawJson.technicalFactors.harmonicData.completionRatio,
+      potential: rawJson.technicalFactors.harmonicData.potentialOutcome as any,
+    } : undefined,
+    description: rawJson.summary?.technicalDescription || "",
+    volatility: rawJson.analysis?.volatilityProfile || "Medium",
+    trendAlignment: rawJson.analysis?.trendAlignment || "Neutral",
+    riskScore: rawJson.summary?.riskProfile || "C",
+  };
 }
