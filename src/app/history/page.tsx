@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Sidebar } from "@/components/sidebar";
 import { MarketTicker } from "@/components/market-ticker";
 import { Topbar } from "@/components/topbar";
+import { Footer } from "@/components/footer";
 import {
     History as HistoryIcon,
     Calendar,
@@ -192,6 +193,7 @@ export default function HistoryPage() {
                             </div>
                         )}
                     </div>
+                    <Footer />
                 </div>
             </main>
         </div>

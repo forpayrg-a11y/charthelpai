@@ -12,6 +12,7 @@ import {
 import { Sidebar } from "@/components/sidebar";
 import { ChartUpload } from "@/components/chart-upload";
 import { Topbar } from "@/components/topbar";
+import { Footer } from "@/components/footer";
 import { AnalysisCard } from "@/components/analysis-card";
 import { TradePlan } from "@/components/trade-plan";
 import { LineChartAI } from "@/components/charts/LineChartAI";
@@ -174,6 +175,7 @@ export default function Home() {
 
             </aside>
           </div>
+          <Footer />
         </div>
       </main>
     </div>

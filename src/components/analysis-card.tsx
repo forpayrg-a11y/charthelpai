@@ -86,12 +86,17 @@ export const AnalysisCard = ({ title, sentiment, confidence, description, patter
                 </div>
             )}
 
-            <div className="pt-4 mt-auto border-t border-border flex items-center justify-between opacity-50">
-                <div className="flex items-center gap-2">
-                    {styles.icon}
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Technicals</span>
+            <div className="pt-4 mt-auto border-t border-border flex flex-col gap-3">
+                <div className="flex items-center justify-between opacity-50">
+                    <div className="flex items-center gap-2">
+                        {styles.icon}
+                        <span className="text-[10px] font-bold uppercase tracking-widest">Technicals</span>
+                    </div>
+                    <Info className="w-4 h-4 cursor-help" />
                 </div>
-                <Info className="w-4 h-4 cursor-help" />
+                <p className="text-[9px] text-foreground/30 font-medium italic leading-tight text-center">
+                    Not financial advice. Trade at your own risk.
+                </p>
             </div>
         </motion.div>
     );

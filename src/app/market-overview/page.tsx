@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Sidebar } from "@/components/sidebar";
 import { MarketTicker } from "@/components/market-ticker";
 import { Topbar } from "@/components/topbar";
+import { Footer } from "@/components/footer";
 import {
     TrendingUp,
     TrendingDown,
@@ -151,6 +152,7 @@ export default function MarketOverviewPage() {
                             </div>
                         </div>
                     </div>
+                    <Footer />
                 </div>
             </main>
         </div>

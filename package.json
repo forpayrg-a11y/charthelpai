@@ -12,6 +12,8 @@
     "@clerk/nextjs": "^6.38.1",
     "@google/generative-ai": "^0.24.1",
     "@stripe/stripe-js": "^8.8.0",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.36.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.34.3",
     "lucide-react": "^0.575.0",
