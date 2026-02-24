@@ -1,8 +1,13 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const apiKey = process.env.GEMINI_API_KEY;
+if (!apiKey) {
+  console.warn("WARNING: GEMINI_API_KEY is not set in environment variables.");
+}
 
-export const visionModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const genAI = new GoogleGenerativeAI(apiKey || "");
+
+export const visionModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 export interface AnalysisResult {
   asset: string;
