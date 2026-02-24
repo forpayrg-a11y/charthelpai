@@ -24,43 +24,20 @@ import { MarketTicker } from "@/components/market-ticker";
 import { ProGate } from "@/components/pro-gate";
 import { useUser } from "@clerk/nextjs";
 import { useUserStore } from "@/store";
+import { useSyncUser } from "@/hooks/use-user-sync";
 
 export default function Home() {
+  useSyncUser();
   const { user: clerkUser, isLoaded: isUserLoaded } = useUser();
   const { isPro, setUser, setLoading: setStoreLoading } = useUserStore();
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
 
   useEffect(() => {
-    const syncUser = async () => {
-      if (!isUserLoaded || !clerkUser) {
-        setStoreLoading(false);
-        return;
-      }
-
-      try {
-        const response = await fetch("/api/user/sync", { method: "POST" });
-        if (response.ok) {
-          const data = await response.json();
-          setUser(data);
-
-          // Legacy bypass check if needed, but setUser handles plan mapping
-          if (process.env.NEXT_PUBLIC_DEVELOPMENT_BYPASS_PRO === "true") {
-            useUserStore.setState({ isPro: true });
-          }
-        }
-      } catch (error) {
-        console.error("Error syncing user:", error);
-      } finally {
-        setStoreLoading(false);
-      }
-    };
-    syncUser();
-
     // Check for Stripe redirect status
     const query = new URLSearchParams(window.location.search);
     if (query.get("success")) {
-      console.log("Subscription successful! Syncing status...");
-      syncUser();
+      console.log("Subscription successful!");
+      // Success logic if needed, but useSyncUser handles updates
     }
     if (query.get("canceled")) {
       console.log("Subscription canceled.");

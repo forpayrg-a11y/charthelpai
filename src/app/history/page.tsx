@@ -16,6 +16,7 @@ import {
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useSyncUser } from "@/hooks/use-user-sync";
 
 interface AnalysisItem {
     _id: string;
@@ -31,6 +32,7 @@ interface AnalysisItem {
 }
 
 export default function HistoryPage() {
+    useSyncUser();
     const [history, setHistory] = useState<AnalysisItem[]>([]);
     const [loading, setLoading] = useState(true);
 

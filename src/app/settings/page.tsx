@@ -19,25 +19,13 @@ import {
     useUser
 } from "@clerk/nextjs";
 import { useUserStore } from "@/store";
+import { useSyncUser } from "@/hooks/use-user-sync";
 
 export default function SettingsPage() {
+    useSyncUser();
     const { user: clerkUser } = useUser();
     const { isPro, setUser } = useUserStore();
     const [loadingPortal, setLoadingPortal] = useState(false);
-
-    useEffect(() => {
-        // Sync pro status (simplified for demo, in real it should fetch from our DB)
-        const checkPro = async () => {
-            try {
-                const response = await fetch("/api/user/sync");
-                const data = await response.json();
-                setUser(data);
-            } catch (error) {
-                console.error("Failed to sync user:", error);
-            }
-        };
-        checkPro();
-    }, []);
 
     const handleManageBilling = async () => {
         setLoadingPortal(true);

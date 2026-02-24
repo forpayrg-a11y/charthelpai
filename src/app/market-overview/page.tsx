@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { useSyncUser } from "@/hooks/use-user-sync";
 
 interface MarketData {
     global: {
@@ -27,6 +28,7 @@ interface MarketData {
 }
 
 export default function MarketOverviewPage() {
+    useSyncUser();
     const [data, setData] = useState<MarketData | null>(null);
     const [loading, setLoading] = useState(true);
 
