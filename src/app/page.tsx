@@ -10,9 +10,12 @@ import {
   LineChart,
   Search,
   Bell,
-  Sparkles
+  Sparkles,
+  Sun,
+  Moon
 } from "lucide-react";
 import { ChartUpload } from "@/components/chart-upload";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { AnalysisCard } from "@/components/analysis-card";
 import { TradePlan } from "@/components/trade-plan";
 import { AnalysisChart } from "@/components/analysis-chart";
@@ -88,7 +91,7 @@ export default function Home() {
   }));
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#050505]">
+    <div className="flex h-screen overflow-hidden bg-background text-foreground transition-colors duration-300">
       {/* Sidebar */}
       <aside className="w-20 lg:w-64 glass-morphism m-4 border-none hidden md:flex flex-col relative z-20">
         <div className="p-6 flex items-center gap-3">
@@ -120,7 +123,7 @@ export default function Home() {
             <p className="text-[10px] text-foreground/50 leading-tight font-medium">Unlock harmonic patterns & whale alerts.</p>
             <button
               onClick={handleUpgrade}
-              className="w-full mt-4 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold py-3 rounded-xl transition-all border border-white/5"
+              className="w-full mt-4 bg-brand-primary text-white text-[10px] font-bold py-3 rounded-xl transition-all shadow-lg shadow-brand-primary/20 hover:opacity-90"
             >
               {isPro ? "Current: PRO" : "Upgrade Now"}
             </button>
@@ -144,9 +147,10 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="p-3 glass rounded-xl relative hover:bg-white/10 transition-colors border border-white/5">
+            <ThemeToggle />
+            <button className="p-3 glass rounded-xl relative hover:bg-muted transition-colors border border-border">
               <Bell className="w-5 h-5 text-foreground/70" />
-              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-[#050505]" />
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-background" />
             </button>
             <div className="flex items-center gap-3 p-1 pr-1 glass rounded-xl hover:bg-white/10 transition-colors cursor-pointer border border-white/5">
               <SignedIn>
@@ -187,7 +191,7 @@ export default function Home() {
                     </h2>
                     <p className="text-sm text-foreground/40 font-medium">Upload a chart screenshot for neural network verification.</p>
                   </div>
-                  <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-2xl border border-white/5">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-muted rounded-2xl border border-border">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-foreground/40">AI Engine Online</span>
                   </div>
@@ -221,14 +225,14 @@ export default function Home() {
                   </motion.div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-40">
-                    <div className="glass-morphism p-12 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2">
-                      <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
+                    <div className="glass-morphism p-12 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-border/50">
+                      <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center border border-border/50">
                         <LineChart className="text-foreground/20" />
                       </div>
                       <p className="text-xs font-bold text-foreground/30 uppercase tracking-widest">Awaiting Scanner Input</p>
                     </div>
-                    <div className="glass-morphism p-12 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2">
-                      <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
+                    <div className="glass-morphism p-12 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-border/50">
+                      <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center border border-border/50">
                         <BrainCircuit className="text-foreground/20" />
                       </div>
                       <p className="text-xs font-bold text-foreground/30 uppercase tracking-widest">Neural Analysis Pending</p>
@@ -280,7 +284,7 @@ function NavItem({ icon, label, active = false }: { icon: React.ReactElement, la
       "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 cursor-pointer group",
       active
         ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/20"
-        : "text-foreground/40 hover:bg-white/5 hover:text-foreground/70"
+        : "text-foreground/40 hover:bg-muted hover:text-foreground/70"
     )}>
       {React.cloneElement(icon, { className: "w-5 h-5" } as React.HTMLAttributes<SVGElement>)}
       <span className="font-bold text-sm hidden lg:block">{label}</span>
