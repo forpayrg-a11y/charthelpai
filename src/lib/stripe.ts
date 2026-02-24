@@ -5,6 +5,6 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: "2026-01-28" as Stripe.LatestApiVersion, // Most recent API version or as required by blueprint
+    apiVersion: "2024-12-18.acacia" as any, // Most recent API version or as required by blueprint
     typescript: true,
 });

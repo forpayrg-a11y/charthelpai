@@ -53,8 +53,8 @@ export default function Home() {
     // Check for Stripe redirect status
     const query = new URLSearchParams(window.location.search);
     if (query.get("success")) {
-      // In a real app, you might show a success toast here
-      console.log("Subscription successful!");
+      console.log("Subscription successful! Syncing status...");
+      syncUser();
     }
     if (query.get("canceled")) {
       console.log("Subscription canceled.");
