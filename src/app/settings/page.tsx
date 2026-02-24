@@ -69,10 +69,10 @@ export default function SettingsPage() {
                 <div className="flex-1 overflow-y-auto p-8">
                     <div className="max-w-4xl mx-auto space-y-8">
                         <div>
-                            <h2 className="text-4xl font-black italic tracking-tighter uppercase leading-none mb-2">
+                            <h2 className="text-2xl lg:text-4xl font-black italic tracking-tighter uppercase leading-none mb-2">
                                 System <span className="text-brand-primary">Settings</span>
                             </h2>
-                            <p className="text-sm text-foreground/40 font-medium">Manage your account, billing, and application preferences.</p>
+                            <p className="text-[10px] lg:text-sm text-foreground/40 font-medium uppercase tracking-widest leading-relaxed">Manage your account, billing, and application preferences.</p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

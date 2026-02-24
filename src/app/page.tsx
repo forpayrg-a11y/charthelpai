@@ -105,18 +105,18 @@ export default function Home() {
         <Topbar />
 
         {/* Dashboard Content */}
-        <div className="flex-1 overflow-y-auto p-8 pt-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-8">
+        <div className="flex-1 overflow-y-auto p-4 lg:p-8 pt-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+            <div className="lg:col-span-2 space-y-6 lg:space-y-8">
               <section>
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 lg:mb-8">
                   <div>
-                    <h2 className="text-4xl font-black italic tracking-tighter uppercase leading-none mb-2">
+                    <h2 className="text-2xl lg:text-4xl font-black italic tracking-tighter uppercase leading-none mb-2">
                       ChartHelp <span className="text-brand-primary"></span>
                     </h2>
-                    <p className="text-sm text-foreground/40 font-medium">Upload a chart screenshot for neural network verification.</p>
+                    <p className="text-xs lg:text-sm text-foreground/40 font-medium">Upload a chart screenshot for neural network verification.</p>
                   </div>
-                  <div className="flex items-center gap-2 px-4 py-2 bg-muted rounded-2xl border border-border">
+                  <div className="flex items-center self-start sm:self-auto gap-2 px-4 py-2 bg-muted rounded-2xl border border-border">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-foreground/40">AI Engine Online</span>
                   </div>

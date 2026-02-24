@@ -5,6 +5,10 @@ import connectToDatabase from "@/lib/mongodb";
 import User from "@/models/User";
 import Stripe from "stripe";
 
+
+
+
+
 export async function POST(req: Request) {
     const body = await req.text();
     const headersList = await headers();

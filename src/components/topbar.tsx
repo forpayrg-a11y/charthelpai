@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Bell } from "lucide-react";
+import { Search, Bell, Menu } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { NotificationPanel } from "./notification-panel";
+import { useUIStore } from "@/store";
 import {
     UserButton,
     SignedIn,
@@ -13,16 +14,26 @@ import {
 
 export const Topbar = () => {
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+    const { toggleSidebar } = useUIStore();
 
     return (
-        <header className="h-20 flex items-center justify-between px-8 bg-background/50 backdrop-blur-md border-b border-border/50 sticky top-0 z-50">
-            <div className="flex items-center gap-4 bg-muted/50 border border-border px-5 py-2.5 rounded-2xl w-96 group focus-within:border-brand-primary/50 transition-all">
-                <Search className="w-4 h-4 text-foreground/30 group-focus-within:text-brand-primary transition-colors" />
-                <input
-                    type="text"
-                    placeholder="Search market, assets, history..."
-                    className="bg-transparent border-none outline-none text-sm w-full placeholder:text-foreground/20 font-medium"
-                />
+        <header className="h-20 flex items-center justify-between px-4 lg:px-8 bg-background/50 backdrop-blur-md border-b border-border/50 sticky top-0 z-40">
+            <div className="flex items-center gap-4">
+                <button
+                    onClick={toggleSidebar}
+                    className="p-2.5 lg:hidden glass rounded-xl border border-border hover:border-brand-primary/30 transition-all"
+                >
+                    <Menu className="w-5 h-5 text-foreground/70" />
+                </button>
+
+                <div className="hidden sm:flex items-center gap-4 bg-muted/50 border border-border px-5 py-2.5 rounded-2xl w-64 lg:w-96 group focus-within:border-brand-primary/50 transition-all">
+                    <Search className="w-4 h-4 text-foreground/30 group-focus-within:text-brand-primary transition-colors" />
+                    <input
+                        type="text"
+                        placeholder="Search market..."
+                        className="bg-transparent border-none outline-none text-sm w-full placeholder:text-foreground/20 font-medium"
+                    />
+                </div>
             </div>
 
             <div className="flex items-center gap-4">

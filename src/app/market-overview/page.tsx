@@ -29,7 +29,6 @@ interface MarketData {
 export default function MarketOverviewPage() {
     const [data, setData] = useState<MarketData | null>(null);
     const [loading, setLoading] = useState(true);
-    const [isPro, setIsPro] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,24 +56,24 @@ export default function MarketOverviewPage() {
 
     return (
         <div className="flex h-screen overflow-hidden bg-background text-foreground transition-colors duration-300">
-            <Sidebar isPro={isPro} onUpgrade={() => { }} />
+            <Sidebar onUpgrade={() => { }} />
 
             <main className="flex-1 flex flex-col overflow-hidden relative">
                 <MarketTicker />
 
                 <Topbar />
 
-                <div className="flex-1 overflow-y-auto p-8">
-                    <div className="max-w-7xl mx-auto space-y-8">
+                <div className="flex-1 overflow-y-auto p-4 lg:p-8">
+                    <div className="max-w-7xl mx-auto space-y-6 lg:space-y-8">
                         <div>
-                            <h2 className="text-4xl font-black italic tracking-tighter uppercase leading-none mb-2">
+                            <h2 className="text-2xl lg:text-4xl font-black italic tracking-tighter uppercase leading-none mb-2">
                                 Market <span className="text-brand-primary">Intelligence</span>
                             </h2>
-                            <p className="text-sm text-foreground/40 font-medium">Real-time global crypto market metrics and performance.</p>
+                            <p className="text-[10px] lg:text-sm text-foreground/40 font-medium uppercase tracking-widest leading-relaxed">Real-time global crypto market metrics and performance.</p>
                         </div>
 
                         {data && (
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
                                 <StatCard
                                     label="Market Cap"
                                     value={formatCurrency(data.global.total_market_cap)}
@@ -100,52 +99,54 @@ export default function MarketOverviewPage() {
                         )}
 
                         <div className="glass-morphism overflow-hidden border border-border">
-                            <table className="w-full text-left border-collapse">
-                                <thead className="bg-muted/50 border-b border-border">
-                                    <tr>
-                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-foreground/40 italic"># Asset</th>
-                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-foreground/40 italic">Price</th>
-                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-foreground/40 italic">24h Change</th>
-                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-foreground/40 italic">Market Cap</th>
-                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-foreground/40 italic text-right">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-border/50">
-                                    {data?.coins.map((coin, i) => (
-                                        <tr key={coin.id} className="hover:bg-muted/30 transition-colors group">
-                                            <td className="px-6 py-4">
-                                                <div className="flex items-center gap-3">
-                                                    <span className="text-xs font-black italic text-foreground/20">{i + 1}</span>
-                                                    <div>
-                                                        <p className="font-black italic text-sm tracking-tight">{coin.name}</p>
-                                                        <p className="text-[10px] font-bold text-foreground/30 uppercase tracking-widest">{coin.symbol}</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 font-black italic text-sm">
-                                                ${coin.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <div className={cn(
-                                                    "flex items-center gap-1 font-black italic text-sm",
-                                                    coin.percent_change_24h >= 0 ? "text-green-500" : "text-red-500"
-                                                )}>
-                                                    {coin.percent_change_24h >= 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
-                                                    {Math.abs(coin.percent_change_24h).toFixed(2)}%
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 text-xs font-bold text-foreground/60">
-                                                {formatCurrency(coin.market_cap)}
-                                            </td>
-                                            <td className="px-6 py-4 text-right">
-                                                <button className="px-4 py-1.5 bg-brand-primary/10 text-brand-primary text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-brand-primary hover:text-white transition-all border border-brand-primary/20">
-                                                    Analyze
-                                                </button>
-                                            </td>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left border-collapse min-w-[800px] lg:min-w-0">
+                                    <thead className="bg-muted/50 border-b border-border">
+                                        <tr>
+                                            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-foreground/40 italic"># Asset</th>
+                                            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-foreground/40 italic">Price</th>
+                                            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-foreground/40 italic">24h Change</th>
+                                            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-foreground/40 italic">Market Cap</th>
+                                            <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-foreground/40 italic text-right">Action</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody className="divide-y divide-border/50">
+                                        {data?.coins.map((coin, i) => (
+                                            <tr key={coin.id} className="hover:bg-muted/30 transition-colors group">
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <span className="text-xs font-black italic text-foreground/20">{i + 1}</span>
+                                                        <div>
+                                                            <p className="font-black italic text-sm tracking-tight">{coin.name}</p>
+                                                            <p className="text-[10px] font-bold text-foreground/30 uppercase tracking-widest">{coin.symbol}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 font-black italic text-sm">
+                                                    ${coin.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </td>
+                                                <td className="px-6 py-4">
+                                                    <div className={cn(
+                                                        "flex items-center gap-1 font-black italic text-sm",
+                                                        coin.percent_change_24h >= 0 ? "text-green-500" : "text-red-500"
+                                                    )}>
+                                                        {coin.percent_change_24h >= 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+                                                        {Math.abs(coin.percent_change_24h).toFixed(2)}%
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 text-xs font-bold text-foreground/60">
+                                                    {formatCurrency(coin.market_cap)}
+                                                </td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <button className="px-4 py-1.5 bg-brand-primary/10 text-brand-primary text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-brand-primary hover:text-white transition-all border border-brand-primary/20">
+                                                        Analyze
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

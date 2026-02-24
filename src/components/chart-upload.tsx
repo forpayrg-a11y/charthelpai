@@ -93,7 +93,7 @@ export const ChartUpload = ({ onAnalysisComplete }: ChartUploadProps) => {
                     document.getElementById("fileInput")?.click();
                 }}
                 className={cn(
-                    "relative group cursor-pointer h-64 border-2 border-dashed rounded-3xl transition-all duration-300 flex flex-col items-center justify-center gap-4 p-6 overflow-hidden",
+                    "relative group cursor-pointer h-52 lg:h-64 border-2 border-dashed rounded-3xl transition-all duration-300 flex flex-col items-center justify-center gap-4 p-4 lg:p-6 overflow-hidden",
                     isDragging
                         ? "border-brand-primary bg-brand-primary/10"
                         : "border-border bg-muted/30 hover:border-brand-primary/30 hover:bg-muted/50"
@@ -146,12 +146,12 @@ export const ChartUpload = ({ onAnalysisComplete }: ChartUploadProps) => {
                             animate={{ opacity: 1 }}
                             className="flex flex-col items-center gap-3 text-center"
                         >
-                            <div className="p-4 rounded-2xl bg-brand-primary/10 text-brand-primary group-hover:scale-110 transition-transform">
-                                <Upload className="w-8 h-8" />
+                            <div className="p-3 lg:p-4 rounded-2xl bg-brand-primary/10 text-brand-primary group-hover:scale-110 transition-transform">
+                                <Upload className="w-6 h-6 lg:w-8 lg:h-8" />
                             </div>
                             <div>
-                                <p className="text-xl font-semibold">Drop your chart here</p>
-                                <p className="text-sm text-foreground/50">Supports PNG, JPG, WebP. AI will analyze details.</p>
+                                <p className="text-lg lg:text-xl font-bold tracking-tight italic">Drop your chart here</p>
+                                <p className="text-[10px] lg:text-sm text-foreground/50 font-medium tracking-wide uppercase mt-1">Supports PNG, JPG, WebP.</p>
                             </div>
                         </motion.div>
                     )}

@@ -9,11 +9,9 @@ import {
     Calendar,
     Clock,
     TrendingUp,
-    TrendingDown,
     ChevronRight,
     ArrowUpRight,
     ArrowDownRight,
-    Trash2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -35,7 +33,6 @@ interface AnalysisItem {
 export default function HistoryPage() {
     const [history, setHistory] = useState<AnalysisItem[]>([]);
     const [loading, setLoading] = useState(true);
-    const [isPro, setIsPro] = useState(false);
 
     useEffect(() => {
         const fetchHistory = async () => {
@@ -52,18 +49,7 @@ export default function HistoryPage() {
             }
         };
 
-        const checkPro = async () => {
-            try {
-                const response = await fetch("/api/user/sync");
-                const data = await response.json();
-                setIsPro(data.plan === "pro");
-            } catch (error) {
-                console.error("Failed to sync user:", error);
-            }
-        };
-
         fetchHistory();
-        checkPro();
     }, []);
 
     const formatDate = (dateString: string) => {
@@ -85,36 +71,36 @@ export default function HistoryPage() {
 
     return (
         <div className="flex h-screen overflow-hidden bg-background text-foreground transition-colors duration-300">
-            <Sidebar isPro={isPro} onUpgrade={() => { }} />
+            <Sidebar onUpgrade={() => { }} />
 
             <main className="flex-1 flex flex-col overflow-hidden relative">
                 <MarketTicker />
 
                 <Topbar />
 
-                <div className="flex-1 overflow-y-auto p-8">
-                    <div className="max-w-5xl mx-auto space-y-8">
-                        <div className="flex items-end justify-between">
+                <div className="flex-1 overflow-y-auto p-4 lg:p-8">
+                    <div className="max-w-7xl mx-auto space-y-6 lg:space-y-8">
+                        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                             <div>
-                                <h2 className="text-4xl font-black italic tracking-tighter uppercase leading-none mb-2">
+                                <h2 className="text-2xl lg:text-4xl font-black italic tracking-tighter uppercase leading-none mb-2">
                                     Analysis <span className="text-brand-primary">History</span>
                                 </h2>
-                                <p className="text-sm text-foreground/40 font-medium">Review your previous AI-powered chart discoveries.</p>
+                                <p className="text-[10px] lg:text-sm text-foreground/40 font-medium uppercase tracking-widest leading-relaxed">Review your previous AI-powered chart discoveries.</p>
                             </div>
-                            <div className="flex items-center gap-2 px-4 py-2 bg-muted/50 border border-border rounded-xl text-[10px] font-black uppercase tracking-widest text-foreground/40">
+                            <div className="flex items-center self-start sm:self-auto gap-2 px-4 py-2 bg-muted/50 border border-border rounded-xl text-[10px] font-black uppercase tracking-widest text-foreground/40">
                                 <HistoryIcon className="w-3 h-3" />
                                 {history.length} Saved Scans
                             </div>
                         </div>
 
                         {loading ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {[1, 2, 3, 4].map((i) => (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                                {[1, 2, 3, 4, 5, 6].map((i) => (
                                     <div key={i} className="h-48 glass-morphism animate-pulse bg-muted/20" />
                                 ))}
                             </div>
                         ) : history.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
                                 <AnimatePresence mode="popLayout">
                                     {history.map((item, index) => (
                                         <motion.div
