@@ -12,14 +12,15 @@ import {
     Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useUserStore } from "@/store";
 
 interface SidebarProps {
-    isPro: boolean;
     onUpgrade: () => void;
 }
 
-export const Sidebar = ({ isPro, onUpgrade }: SidebarProps) => {
+export const Sidebar = ({ onUpgrade }: SidebarProps) => {
     const pathname = usePathname();
+    const { isPro } = useUserStore();
 
     return (
         <aside className="w-20 lg:w-72 border-r border-border bg-muted/30 flex flex-col transition-all duration-300 relative z-40 backdrop-blur-xl">

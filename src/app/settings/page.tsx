@@ -18,10 +18,11 @@ import { motion } from "framer-motion";
 import {
     useUser
 } from "@clerk/nextjs";
+import { useUserStore } from "@/store";
 
 export default function SettingsPage() {
     const { user: clerkUser } = useUser();
-    const [isPro, setIsPro] = useState(false);
+    const { isPro, setUser } = useUserStore();
     const [loadingPortal, setLoadingPortal] = useState(false);
 
     useEffect(() => {
@@ -30,7 +31,7 @@ export default function SettingsPage() {
             try {
                 const response = await fetch("/api/user/sync");
                 const data = await response.json();
-                setIsPro(data.plan === "pro");
+                setUser(data);
             } catch (error) {
                 console.error("Failed to sync user:", error);
             }
@@ -58,7 +59,7 @@ export default function SettingsPage() {
 
     return (
         <div className="flex h-screen overflow-hidden bg-background text-foreground transition-colors duration-300">
-            <Sidebar isPro={isPro} onUpgrade={() => { }} />
+            <Sidebar onUpgrade={() => { }} />
 
             <main className="flex-1 flex flex-col overflow-hidden relative">
                 <MarketTicker />

@@ -23,17 +23,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MarketTicker } from "@/components/market-ticker";
 import { ProGate } from "@/components/pro-gate";
 import { useUser } from "@clerk/nextjs";
+import { useUserStore } from "@/store";
 
 export default function Home() {
-  const { user, isLoaded: isUserLoaded } = useUser();
+  const { user: clerkUser, isLoaded: isUserLoaded } = useUser();
+  const { isPro, setUser, setLoading: setStoreLoading } = useUserStore();
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
-  const [isPro, setIsPro] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const syncUser = async () => {
-      if (!isUserLoaded || !user) {
-        setLoading(false);
+      if (!isUserLoaded || !clerkUser) {
+        setStoreLoading(false);
         return;
       }
 
@@ -41,12 +41,17 @@ export default function Home() {
         const response = await fetch("/api/user/sync", { method: "POST" });
         if (response.ok) {
           const data = await response.json();
-          setIsPro(data.plan === "pro" || process.env.NEXT_PUBLIC_DEVELOPMENT_BYPASS_PRO === "true");
+          setUser(data);
+
+          // Legacy bypass check if needed, but setUser handles plan mapping
+          if (process.env.NEXT_PUBLIC_DEVELOPMENT_BYPASS_PRO === "true") {
+            useUserStore.setState({ isPro: true });
+          }
         }
       } catch (error) {
         console.error("Error syncing user:", error);
       } finally {
-        setLoading(false);
+        setStoreLoading(false);
       }
     };
     syncUser();
@@ -91,7 +96,7 @@ export default function Home() {
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground transition-colors duration-300">
       {/* Sidebar */}
-      <Sidebar isPro={isPro} onUpgrade={handleUpgrade} />
+      <Sidebar onUpgrade={handleUpgrade} />
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden relative">
