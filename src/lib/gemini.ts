@@ -7,7 +7,7 @@ if (!apiKey) {
 
 const genAI = new GoogleGenerativeAI(apiKey || "");
 
-export const visionModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+export const visionModel = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 export interface AnalysisResult {
   asset: string;

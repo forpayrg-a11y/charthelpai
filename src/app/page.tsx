@@ -40,7 +40,7 @@ export default function Home() {
         const response = await fetch("/api/user/sync", { method: "POST" });
         if (response.ok) {
           const data = await response.json();
-          setIsPro(data.plan === "pro");
+          setIsPro(data.plan === "pro" || process.env.NEXT_PUBLIC_DEVELOPMENT_BYPASS_PRO === "true");
         }
       } catch (error) {
         console.error("Error syncing user:", error);
@@ -212,7 +212,7 @@ export default function Home() {
                       description={analysis.description}
                       patterns={analysis.patterns}
                     />
-                    <ProGate isPro={isPro} featureName="Harmonic Visualizations">
+                    <ProGate isPro={isPro} featureName="Harmonic Visualizations" onUpgrade={handleUpgrade}>
                       <AnalysisChart
                         data={mockChartData}
                         sentiment={analysis.sentiment}
@@ -254,7 +254,7 @@ export default function Home() {
                 </div>
               )}
 
-              <ProGate isPro={isPro} featureName="Whale Alerts">
+              <ProGate isPro={isPro} featureName="Whale Alerts" onUpgrade={handleUpgrade}>
                 <WhaleAlerts />
               </ProGate>
 

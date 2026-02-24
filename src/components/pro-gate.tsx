@@ -7,9 +7,10 @@ interface ProGateProps {
     children: React.ReactNode;
     isPro?: boolean;
     featureName?: string;
+    onUpgrade?: () => void;
 }
 
-export const ProGate = ({ children, isPro = false, featureName = "Advanced Analysis" }: ProGateProps) => {
+export const ProGate = ({ children, isPro = false, featureName = "Advanced Analysis", onUpgrade }: ProGateProps) => {
     if (isPro) return <>{children}</>;
 
     return (
@@ -25,7 +26,10 @@ export const ProGate = ({ children, isPro = false, featureName = "Advanced Analy
                 <p className="text-xs text-foreground/60 mb-6 max-w-[200px]">
                     Upgrade to PRO to unlock {featureName} and detailed harmonic patterns.
                 </p>
-                <button className="flex items-center gap-2 bg-brand-primary text-white text-[10px] font-black h-10 px-6 rounded-xl hover:opacity-90 transition-opacity">
+                <button
+                    onClick={onUpgrade}
+                    className="flex items-center gap-2 bg-brand-primary text-white text-[10px] font-black h-10 px-6 rounded-xl hover:opacity-90 transition-opacity"
+                >
                     <Sparkles className="w-3 h-3" />
                     UPGRADE NOW
                 </button>
