@@ -17,12 +17,13 @@ interface ChartData {
     price: number;
 }
 
-interface AnalysisChartProps {
+interface LineChartAIProps {
     data: ChartData[];
     sentiment: "bullish" | "bearish" | "neutral";
+    title?: string;
 }
 
-export const AnalysisChart = ({ data, sentiment }: AnalysisChartProps) => {
+export const LineChartAI = ({ data, sentiment, title = "Market Visualization" }: LineChartAIProps) => {
     const gradientColor = sentiment === "bullish" ? "#22c55e" : sentiment === "bearish" ? "#ef4444" : "#6366f1";
 
     return (
@@ -32,17 +33,17 @@ export const AnalysisChart = ({ data, sentiment }: AnalysisChartProps) => {
             className="glass-morphism p-6 h-[400px] w-full"
         >
             <div className="flex items-center justify-between mb-4">
-                <h3 className="font-bold text-lg tracking-tight">Market Visualization</h3>
+                <h3 className="font-bold text-lg tracking-tight uppercase italic">{title}</h3>
                 <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: gradientColor }} />
-                    <span className="text-[10px] font-bold uppercase tracking-wider opacity-50">Real-time Simulation</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider opacity-50 text-brand-primary">Neural Stream</span>
                 </div>
             </div>
 
             <ResponsiveContainer width="100%" height="85%">
                 <AreaChart data={data}>
                     <defs>
-                        <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                        <linearGradient id="colorPriceLine" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor={gradientColor} stopOpacity={0.3} />
                             <stop offset="95%" stopColor={gradientColor} stopOpacity={0} />
                         </linearGradient>
@@ -74,7 +75,7 @@ export const AnalysisChart = ({ data, sentiment }: AnalysisChartProps) => {
                         stroke={gradientColor}
                         strokeWidth={3}
                         fillOpacity={1}
-                        fill="url(#colorPrice)"
+                        fill="url(#colorPriceLine)"
                         animationDuration={2000}
                     />
                 </AreaChart>

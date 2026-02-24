@@ -2,43 +2,41 @@
 
 import React, { useState, useEffect } from "react";
 import {
-  BrainCircuit,
-  Settings,
-  Zap,
-  LayoutDashboard,
+  Plus,
   History,
-  LineChart,
-  Search,
-  Bell,
+  FileImage,
   Sparkles,
-  Sun,
-  Moon
+  BrainCircuit,
+  LineChart
 } from "lucide-react";
+import { Sidebar } from "@/components/sidebar";
 import { ChartUpload } from "@/components/chart-upload";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { Topbar } from "@/components/topbar";
 import { AnalysisCard } from "@/components/analysis-card";
 import { TradePlan } from "@/components/trade-plan";
-import { AnalysisChart } from "@/components/analysis-chart";
+import { LineChartAI } from "@/components/charts/LineChartAI";
+import { QuickInsights } from "@/components/quick-insights";
 import { WhaleAlerts } from "@/components/whale-alerts";
 import { cn } from "@/lib/utils";
 import { AnalysisResult } from "@/lib/gemini";
-import {
-  UserButton,
-  SignedIn,
-  SignedOut,
-  SignInButton
-} from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
 import { MarketTicker } from "@/components/market-ticker";
 import { ProGate } from "@/components/pro-gate";
+import { useUser } from "@clerk/nextjs";
 
 export default function Home() {
+  const { user, isLoaded: isUserLoaded } = useUser();
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
   const [isPro, setIsPro] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const syncUser = async () => {
+      if (!isUserLoaded || !user) {
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await fetch("/api/user/sync", { method: "POST" });
         if (response.ok) {
@@ -93,91 +91,13 @@ export default function Home() {
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground transition-colors duration-300">
       {/* Sidebar */}
-      <aside className="w-20 lg:w-64 glass-morphism m-4 border-none hidden md:flex flex-col relative z-20">
-        <div className="p-6 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-brand-primary flex items-center justify-center shadow-lg shadow-brand-primary/20">
-            <BrainCircuit className="text-white w-6 h-6" />
-          </div>
-          <motion.span
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="font-black text-xl tracking-tight hidden lg:block"
-          >
-            Charthelp <span className="text-brand-primary">AI</span>
-          </motion.span>
-        </div>
-
-        <nav className="flex-1 px-4 space-y-2 py-4">
-          <NavItem icon={<LayoutDashboard />} label="Dashboard" active />
-          <NavItem icon={<History />} label="Analysis History" />
-          <NavItem icon={<LineChart />} label="Market Overview" />
-          <NavItem icon={<Settings />} label="Settings" />
-        </nav>
-
-        <div className="p-4 mt-auto">
-          <div className="glass p-5 rounded-2xl hidden lg:block border border-white/5 bg-gradient-to-br from-white/5 to-transparent">
-            <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="w-4 h-4 text-brand-secondary" />
-              <p className="text-[10px] font-black text-brand-secondary tracking-widest uppercase">PRO PLAN</p>
-            </div>
-            <p className="text-[10px] text-foreground/50 leading-tight font-medium">Unlock harmonic patterns & whale alerts.</p>
-            <button
-              onClick={handleUpgrade}
-              className="w-full mt-4 bg-brand-primary text-white text-[10px] font-bold py-3 rounded-xl transition-all shadow-lg shadow-brand-primary/20 hover:opacity-90"
-            >
-              {isPro ? "Current: PRO" : "Upgrade Now"}
-            </button>
-          </div>
-        </div>
-      </aside>
+      <Sidebar isPro={isPro} onUpgrade={handleUpgrade} />
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden relative">
         <MarketTicker />
 
-        {/* Topbar */}
-        <header className="h-20 flex items-center justify-between px-8">
-          <div className="flex items-center gap-4 bg-white/5 border border-white/10 px-5 py-2.5 rounded-2xl w-96 focus-within:border-brand-primary/50 transition-colors">
-            <Search className="w-4 h-4 text-foreground/30" />
-            <input
-              type="text"
-              placeholder="Search assets or analysis..."
-              className="bg-transparent border-none outline-none text-sm w-full placeholder:text-foreground/20 font-medium"
-            />
-          </div>
-
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <button className="p-3 glass rounded-xl relative hover:bg-muted transition-colors border border-border">
-              <Bell className="w-5 h-5 text-foreground/70" />
-              <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-background" />
-            </button>
-            <div className="flex items-center gap-3 p-1 pr-1 glass rounded-xl hover:bg-white/10 transition-colors cursor-pointer border border-white/5">
-              <SignedIn>
-                <div className="flex items-center gap-3 pl-4 pr-1">
-                  <div className="hidden lg:block text-right">
-                    <p className="text-[10px] font-bold text-foreground/30 leading-none mb-1">TRADING AS</p>
-                    <p className="text-xs font-black tracking-tight">Tom @ Gorvu</p>
-                  </div>
-                  <UserButton
-                    appearance={{
-                      elements: {
-                        avatarBox: "w-10 h-10 rounded-lg shadow-lg"
-                      }
-                    }}
-                  />
-                </div>
-              </SignedIn>
-              <SignedOut>
-                <SignInButton mode="modal">
-                  <button className="px-6 py-2.5 bg-brand-primary text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-brand-primary/20">
-                    Sign In
-                  </button>
-                </SignInButton>
-              </SignedOut>
-            </div>
-          </div>
-        </header>
+        <Topbar />
 
         {/* Dashboard Content */}
         <div className="flex-1 overflow-y-auto p-8 pt-4">
@@ -187,7 +107,7 @@ export default function Home() {
                 <div className="flex items-center justify-between mb-8">
                   <div>
                     <h2 className="text-4xl font-black italic tracking-tighter uppercase leading-none mb-2">
-                      Scanner <span className="text-brand-primary">01</span>
+                      ChartHelp <span className="text-brand-primary"></span>
                     </h2>
                     <p className="text-sm text-foreground/40 font-medium">Upload a chart screenshot for neural network verification.</p>
                   </div>
@@ -197,6 +117,14 @@ export default function Home() {
                   </div>
                 </div>
                 <ChartUpload onAnalysisComplete={handleAnalysisComplete} />
+                {analysis && (
+                  <QuickInsights
+                    volatility={analysis.volatility || "---"}
+                    trendAlignment={analysis.trendAlignment || "---"}
+                    riskScore={analysis.riskScore || "---"}
+                    className="mt-8"
+                  />
+                )}
               </section>
 
               <AnimatePresence mode="wait">
@@ -217,14 +145,14 @@ export default function Home() {
                       patterns={analysis.patterns}
                     />
                     <ProGate isPro={isPro} featureName="Harmonic Visualizations" onUpgrade={handleUpgrade}>
-                      <AnalysisChart
+                      <LineChartAI
                         data={mockChartData}
                         sentiment={analysis.sentiment}
                       />
                     </ProGate>
                   </motion.div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-40">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-60 dark:opacity-40">
                     <div className="glass-morphism p-12 flex flex-col items-center justify-center text-center gap-4 border-dashed border-2 border-border/50">
                       <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center border border-border/50">
                         <LineChart className="text-foreground/20" />
@@ -262,14 +190,6 @@ export default function Home() {
                 <WhaleAlerts />
               </ProGate>
 
-              <div className="glass-morphism p-6 space-y-4">
-                <h4 className="font-bold text-sm tracking-widest uppercase text-foreground/40">Quick Insights</h4>
-                <div className="space-y-3">
-                  <InsightItem label="Market Volatility" value={analysis ? "High" : "---"} />
-                  <InsightItem label="Trend Alignment" value={analysis?.sentiment === "bullish" ? "Strong" : "Weak"} />
-                  <InsightItem label="Risk Score" value={analysis ? "B+" : "---"} />
-                </div>
-              </div>
             </aside>
           </div>
         </div>
@@ -278,25 +198,3 @@ export default function Home() {
   );
 }
 
-function NavItem({ icon, label, active = false }: { icon: React.ReactElement, label: string, active?: boolean }) {
-  return (
-    <div className={cn(
-      "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 cursor-pointer group",
-      active
-        ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/20"
-        : "text-foreground/40 hover:bg-muted hover:text-foreground/70"
-    )}>
-      {React.cloneElement(icon, { className: "w-5 h-5" } as React.HTMLAttributes<SVGElement>)}
-      <span className="font-bold text-sm hidden lg:block">{label}</span>
-    </div>
-  );
-}
-
-function InsightItem({ label, value }: { label: string, value: string }) {
-  return (
-    <div className="flex items-center justify-between">
-      <span className="text-xs text-foreground/50 font-medium">{label}</span>
-      <span className="text-xs font-bold px-2 py-0.5 bg-white/5 rounded-md">{value}</span>
-    </div>
-  );
-}

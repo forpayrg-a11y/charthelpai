@@ -30,6 +30,9 @@ export async function POST(req: NextRequest) {
                     patterns: result.patterns,
                     levels: result.levels,
                     description: result.description,
+                    volatility: result.volatility,
+                    trendAlignment: result.trendAlignment,
+                    riskScore: result.riskScore,
                 });
             } catch (dbError) {
                 console.error("Failed to save analysis:", dbError);

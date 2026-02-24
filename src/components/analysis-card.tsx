@@ -61,7 +61,7 @@ export const AnalysisCard = ({ title, sentiment, confidence, description, patter
                         <span className="text-[10px] font-bold text-foreground/40 uppercase">AI Confidence</span>
                         <span className="text-xs font-black">{confidence}%</span>
                     </div>
-                    <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden border border-border/50">
                         <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${confidence}%` }}
@@ -79,14 +79,14 @@ export const AnalysisCard = ({ title, sentiment, confidence, description, patter
             {patterns && patterns.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                     {patterns.map((pattern, i) => (
-                        <span key={i} className="px-2 py-1 bg-white/5 rounded-md text-[10px] font-bold text-brand-primary border border-white/5">
+                        <span key={i} className="px-2 py-1 bg-muted rounded-md text-[10px] font-bold text-brand-primary border border-border">
                             #{pattern}
                         </span>
                     ))}
                 </div>
             )}
 
-            <div className="pt-4 mt-auto border-t border-white/5 flex items-center justify-between opacity-50">
+            <div className="pt-4 mt-auto border-t border-border flex items-center justify-between opacity-50">
                 <div className="flex items-center gap-2">
                     {styles.icon}
                     <span className="text-[10px] font-bold uppercase tracking-widest">Technicals</span>

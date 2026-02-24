@@ -13,7 +13,10 @@ export interface IAnalysis extends Document {
         tp: string[];
     };
     description: string;
-    imageKey?: string; // S3 or Storage key if implemented later
+    volatility?: string;
+    trendAlignment?: string;
+    riskScore?: string;
+    imageKey?: string;
     createdAt: Date;
 }
 
@@ -31,6 +34,9 @@ const AnalysisSchema: Schema = new Schema(
             tp: [{ type: String }],
         },
         description: { type: String },
+        volatility: { type: String },
+        trendAlignment: { type: String },
+        riskScore: { type: String },
         imageKey: { type: String },
     },
     { timestamps: { createdAt: true, updatedAt: false } }

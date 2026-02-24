@@ -18,7 +18,7 @@ export const TradePlan = ({ levels }: { levels: Level[] }) => {
             transition={{ delay: 0.2 }}
             className="glass-morphism overflow-hidden"
         >
-            <div className="bg-white/5 p-4 border-b border-white/10 flex items-center justify-between">
+            <div className="bg-muted p-4 border-b border-border flex items-center justify-between">
                 <h3 className="font-bold flex items-center gap-2">
                     <Target className="w-4 h-4 text-brand-primary" />
                     Execution Plan
@@ -32,8 +32,8 @@ export const TradePlan = ({ levels }: { levels: Level[] }) => {
                     <div key={idx} className="flex items-center justify-between group">
                         <div className="flex items-center gap-3">
                             <div className={`p-2 rounded-lg ${level.type === 'entry' ? 'bg-blue-500/10 text-blue-400' :
-                                    level.type === 'sl' ? 'bg-red-500/10 text-red-400' :
-                                        'bg-green-500/10 text-green-400'
+                                level.type === 'sl' ? 'bg-red-500/10 text-red-400' :
+                                    'bg-green-500/10 text-green-400'
                                 }`}>
                                 {level.type === 'entry' && <Zap className="w-4 h-4" />}
                                 {level.type === 'sl' && <ShieldX className="w-4 h-4" />}

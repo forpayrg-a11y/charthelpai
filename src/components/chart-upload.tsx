@@ -4,15 +4,19 @@ import React, { useState } from "react";
 import { Upload, Image as ImageIcon, X, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useAuth, useClerk } from "@clerk/nextjs";
 
 interface ChartUploadProps {
     onAnalysisComplete?: (result: any) => void;
 }
 
 export const ChartUpload = ({ onAnalysisComplete }: ChartUploadProps) => {
+    const { isSignedIn } = useAuth();
+    const { openSignIn } = useClerk();
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [preview, setPreview] = useState<string | null>(null);
+
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
@@ -45,6 +49,12 @@ export const ChartUpload = ({ onAnalysisComplete }: ChartUploadProps) => {
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault();
         setIsDragging(false);
+
+        if (!isSignedIn) {
+            openSignIn();
+            return;
+        }
+
         const file = e.dataTransfer.files[0];
         if (file && file.type.startsWith("image/")) {
             const reader = new FileReader();
@@ -55,6 +65,11 @@ export const ChartUpload = ({ onAnalysisComplete }: ChartUploadProps) => {
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!isSignedIn) {
+            openSignIn();
+            return;
+        }
+
         const file = e.target.files?.[0];
         if (file) {
             const reader = new FileReader();
@@ -70,12 +85,18 @@ export const ChartUpload = ({ onAnalysisComplete }: ChartUploadProps) => {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                onClick={() => document.getElementById("fileInput")?.click()}
+                onClick={() => {
+                    if (!isSignedIn) {
+                        openSignIn();
+                        return;
+                    }
+                    document.getElementById("fileInput")?.click();
+                }}
                 className={cn(
                     "relative group cursor-pointer h-64 border-2 border-dashed rounded-3xl transition-all duration-300 flex flex-col items-center justify-center gap-4 p-6 overflow-hidden",
                     isDragging
                         ? "border-brand-primary bg-brand-primary/10"
-                        : "border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10"
+                        : "border-border bg-muted/30 hover:border-brand-primary/30 hover:bg-muted/50"
                 )}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -136,7 +157,7 @@ export const ChartUpload = ({ onAnalysisComplete }: ChartUploadProps) => {
                     )}
                 </AnimatePresence>
             </motion.div>
-        </div>
+        </div >
     );
 };
 

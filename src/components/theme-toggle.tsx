@@ -6,19 +6,32 @@ import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
 export function ThemeToggle({ className }: { className?: string }) {
-    const { theme, setTheme } = useTheme();
+    const { setTheme, resolvedTheme } = useTheme();
+    const [mounted, setMounted] = React.useState(false);
+
+    // Hydration mismatch prevention
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
+        return <div className="p-3 glass rounded-xl border border-border w-11 h-11" />;
+    }
 
     return (
         <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
             className={cn(
-                "p-3 glass rounded-xl hover:bg-muted transition-colors border border-border cursor-pointer flex items-center justify-center",
+                "p-3 glass rounded-xl hover:bg-muted transition-colors border border-border cursor-pointer flex items-center justify-center relative w-11 h-11",
                 className
             )}
             aria-label="Toggle theme"
         >
-            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-foreground/70" />
-            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 text-foreground/70" />
+            {resolvedTheme === "dark" ? (
+                <Sun className="h-5 w-5 text-foreground/70 transition-all animate-in zoom-in-50 duration-500" />
+            ) : (
+                <Moon className="h-5 w-5 text-foreground/70 transition-all animate-in zoom-in-50 duration-500" />
+            )}
         </button>
     );
 }

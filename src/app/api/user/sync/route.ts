@@ -3,6 +3,27 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import User from "@/models/User";
 import connectToDatabase from "@/lib/mongodb";
 
+export async function GET() {
+    try {
+        const { userId } = await auth();
+        if (!userId) {
+            return new NextResponse("Unauthorized", { status: 401 });
+        }
+
+        await connectToDatabase();
+        const user = await User.findOne({ clerkId: userId });
+
+        if (!user) {
+            return new NextResponse("User not found", { status: 404 });
+        }
+
+        return NextResponse.json(user);
+    } catch (error) {
+        console.error("[USER_GET]", error);
+        return new NextResponse("Internal Error", { status: 500 });
+    }
+}
+
 export async function POST() {
     try {
         const { userId } = await auth();

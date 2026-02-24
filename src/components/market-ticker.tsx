@@ -11,39 +11,62 @@ interface TickerItem {
     isUp: boolean;
 }
 
-const INITIAL_DATA: TickerItem[] = [
-    { symbol: "BTC/USDT", price: "52,430.50", change: "+1.2%", isUp: true },
-    { symbol: "ETH/USDT", price: "3,120.80", change: "-0.5%", isUp: false },
-    { symbol: "SOL/USDT", price: "108.45", change: "+4.8%", isUp: true },
-    { symbol: "ADA/USDT", price: "0.58", change: "+0.1%", isUp: true },
-    { symbol: "DOT/USDT", price: "7.85", change: "-2.1%", isUp: false },
-    { symbol: "AVAX/USDT", price: "38.20", change: "+0.9%", isUp: true },
-];
+interface GeminiTickerItem {
+    pair: string;
+    price: string;
+    percentChange24h: string;
+}
+
+const TRACKED_SYMBOLS = ["BTCUSD", "ETHUSD", "SOLUSD", "XRPUSD", "AVAXUSD", "LINKUSD", "PEPEUSD", "DOGEUSD"];
 
 export const MarketTicker = () => {
-    const [data, setData] = useState(INITIAL_DATA);
+    const [data, setData] = useState<TickerItem[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchPrices = async () => {
+        try {
+            const response = await fetch("https://api.gemini.com/v1/pricefeed");
+            const rawData: GeminiTickerItem[] = await response.json();
+
+            const filteredData: TickerItem[] = rawData
+                .filter(item => TRACKED_SYMBOLS.includes(item.pair))
+                .map(item => ({
+                    symbol: item.pair.replace("USD", "/USDT"),
+                    price: parseFloat(item.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                    change: `${(parseFloat(item.percentChange24h) * 100).toFixed(1)}%`,
+                    isUp: parseFloat(item.percentChange24h) >= 0
+                }));
+
+            // Sort by symbol to keep consistent order
+            filteredData.sort((a, b) => a.symbol.localeCompare(b.symbol));
+
+            setData(filteredData);
+            setLoading(false);
+        } catch (error) {
+            console.error("Failed to fetch Gemini prices:", error);
+            // Fallback or keep previous data
+        }
+    };
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setData((prev) =>
-                prev.map((item) => ({
-                    ...item,
-                    price: (parseFloat(item.price.replace(',', '')) + (Math.random() - 0.5) * (parseFloat(item.price.replace(',', '')) * 0.001)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-                }))
-            );
-        }, 3000);
+        fetchPrices();
+        const interval = setInterval(fetchPrices, 15000); // 15s refresh
         return () => clearInterval(interval);
     }, []);
 
+    if (loading && data.length === 0) {
+        return <div className="w-full bg-muted/50 border-y border-border py-2 h-10 animate-pulse" />;
+    }
+
     return (
-        <div className="w-full bg-white/5 border-y border-white/10 overflow-hidden py-2 whitespace-nowrap">
+        <div className="w-full bg-muted/50 border-y border-border overflow-hidden py-2 whitespace-nowrap">
             <motion.div
                 animate={{ x: ["0%", "-50%"] }}
-                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                 className="inline-flex gap-12 px-12"
             >
                 {[...data, ...data].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3">
+                    <div key={`${item.symbol}-${i}`} className="flex items-center gap-3">
                         <span className="font-bold text-[10px] text-foreground/50 tracking-widest">{item.symbol}</span>
                         <span className="font-black text-sm tabular-nums">${item.price}</span>
                         <span className={`flex items-center gap-0.5 text-[10px] font-black ${item.isUp ? "text-green-400" : "text-red-400"}`}>
