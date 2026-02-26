@@ -18,7 +18,7 @@ export const WhaleAlerts = () => {
 
     const fetchAlerts = async () => {
         try {
-            const response = await fetch("/api/whales");
+            const response = await fetch("/api/whale-alerts");
             if (!response.ok) throw new Error(`API Error: ${response.status}`);
             const data = await response.json();
 
