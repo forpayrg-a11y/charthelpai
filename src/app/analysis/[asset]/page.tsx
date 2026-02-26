@@ -1,7 +1,7 @@
 import { Metadata, ResolvingMetadata } from 'next';
-import { Sidebar } from "@/components/sidebar";
-import { Topbar } from "@/components/topbar";
-import { MarketTicker } from "@/components/market-ticker";
+import { Sidebar } from "@/components/ui/sidebar";
+import { Topbar } from "@/components/ui/topbar";
+import { MarketTicker } from "@/components/ui/market-ticker";
 import { cn } from "@/lib/utils";
 
 interface PageProps {

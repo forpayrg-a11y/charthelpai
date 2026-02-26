@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { Sidebar } from "@/components/sidebar";
-import { MarketTicker } from "@/components/market-ticker";
-import { Topbar } from "@/components/topbar";
+import { Sidebar } from "@/components/ui/sidebar";
+import { MarketTicker } from "@/components/ui/market-ticker";
+import { Topbar } from "@/components/ui/topbar";
 import { Shield, Scale, ScrollText } from "lucide-react";
 
 export default function TermsPage() {

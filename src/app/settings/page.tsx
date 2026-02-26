@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Sidebar } from "@/components/sidebar";
-import { MarketTicker } from "@/components/market-ticker";
-import { Topbar } from "@/components/topbar";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { Sidebar } from "@/components/ui/sidebar";
+import { MarketTicker } from "@/components/ui/market-ticker";
+import { Topbar } from "@/components/ui/topbar";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import {
     User,
     CreditCard,

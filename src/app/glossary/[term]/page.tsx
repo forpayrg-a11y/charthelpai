@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
-import { Sidebar } from "@/components/sidebar";
-import { Topbar } from "@/components/topbar";
-import { MarketTicker } from "@/components/market-ticker";
+import { Sidebar } from "@/components/ui/sidebar";
+import { Topbar } from "@/components/ui/topbar";
+import { MarketTicker } from "@/components/ui/market-ticker";
 import { Sparkles, ArrowRight, BookOpen } from "lucide-react";
 import Link from 'next/link';
 

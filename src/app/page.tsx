@@ -9,20 +9,20 @@ import {
   BrainCircuit,
   LineChart
 } from "lucide-react";
-import { Sidebar } from "@/components/sidebar";
-import { ChartUpload } from "@/components/chart-upload";
-import { Topbar } from "@/components/topbar";
-import { Footer } from "@/components/footer";
-import { AnalysisCard } from "@/components/analysis-card";
-import { TradePlan } from "@/components/trade-plan";
+import { Sidebar } from "@/components/ui/sidebar";
+import { ChartUpload } from "@/components/ui/chart-upload";
+import { Topbar } from "@/components/ui/topbar";
+import { Footer } from "@/components/ui/footer";
+import { AnalysisCard } from "@/components/ui/analysis-card";
+import { TradePlan } from "@/components/ui/trade-plan";
 import { LineChartAI } from "@/components/charts/LineChartAI";
-import { QuickInsights } from "@/components/quick-insights";
-import { WhaleAlerts } from "@/components/whale-alerts";
+import { QuickInsights } from "@/components/ui/quick-insights";
+import { WhaleAlerts } from "@/components/ui/whale-alerts";
 import { cn } from "@/lib/utils";
 import { AnalysisResult } from "@/lib/gemini";
 import { motion, AnimatePresence } from "framer-motion";
-import { MarketTicker } from "@/components/market-ticker";
-import { ProGate } from "@/components/pro-gate";
+import { MarketTicker } from "@/components/ui/market-ticker";
+import { ProGate } from "@/components/ui/pro-gate";
 import { useUser } from "@clerk/nextjs";
 import { useUserStore } from "@/store";
 import { useSyncUser } from "@/hooks/use-user-sync";

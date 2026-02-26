@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Sidebar } from "@/components/sidebar";
-import { MarketTicker } from "@/components/market-ticker";
-import { Topbar } from "@/components/topbar";
-import { Footer } from "@/components/footer";
+import { Sidebar } from "@/components/ui/sidebar";
+import { MarketTicker } from "@/components/ui/market-ticker";
+import { Topbar } from "@/components/ui/topbar";
+import { Footer } from "@/components/ui/footer";
 import {
     TrendingUp,
     TrendingDown,
