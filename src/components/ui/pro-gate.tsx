@@ -1,17 +1,21 @@
-"use client";
-
 import React from "react";
 import { Lock, Sparkles } from "lucide-react";
+import { useUIStore } from "@/store";
 
 interface ProGateProps {
     children: React.ReactNode;
     isPro?: boolean;
     featureName?: string;
-    onUpgrade?: () => void;
 }
 
-export const ProGate = ({ children, isPro = false, featureName = "Advanced Analysis", onUpgrade }: ProGateProps) => {
+export const ProGate = ({ children, isPro = false, featureName = "Advanced Analysis" }: ProGateProps) => {
+    const { setPricingModalOpen } = useUIStore();
+
     if (isPro) return <>{children}</>;
+
+    const handleUpgradeClick = () => {
+        setPricingModalOpen(true);
+    };
 
     return (
         <div className="relative group">
@@ -27,11 +31,11 @@ export const ProGate = ({ children, isPro = false, featureName = "Advanced Analy
                     Upgrade to PRO to unlock {featureName} and detailed harmonic patterns.
                 </p>
                 <button
-                    onClick={onUpgrade}
-                    className="flex items-center gap-2 bg-brand-primary text-white text-[10px] font-black h-10 px-6 rounded-xl hover:opacity-90 transition-opacity"
+                    onClick={handleUpgradeClick}
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-brand-primary text-white text-[10px] font-black h-12 px-8 rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-brand-primary/20"
                 >
                     <Sparkles className="w-3 h-3" />
-                    UPGRADE NOW
+                    UPGRADE TO PRO
                 </button>
             </div>
         </div>

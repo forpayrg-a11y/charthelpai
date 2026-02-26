@@ -10,11 +10,17 @@ const getAppUrl = () => {
     return "http://localhost:3000";
 };
 
-export async function POST() {
+export async function POST(req: Request) {
     try {
         const { userId } = await auth();
         if (!userId) {
             return new NextResponse("Unauthorized", { status: 401 });
+        }
+
+        const { priceId } = await req.json();
+
+        if (!priceId) {
+            return new NextResponse("Price ID is required", { status: 400 });
         }
 
         const clerkUser = await currentUser();
@@ -27,7 +33,6 @@ export async function POST() {
         let user = await User.findOne({ clerkId: userId });
 
         if (!user) {
-            // This case should be handled by the sync route, but as a fallback:
             user = await User.create({
                 clerkId: userId,
                 email: clerkUser.emailAddresses[0].emailAddress,
@@ -54,7 +59,7 @@ export async function POST() {
             customer: user.stripeCustomerId,
             line_items: [
                 {
-                    price: process.env.STRIPE_PRO_PLAN_PRICE_ID,
+                    price: priceId,
                     quantity: 1,
                 },
             ],

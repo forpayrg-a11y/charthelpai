@@ -15,14 +15,10 @@ import {
 import { cn } from "@/lib/utils";
 import { useUserStore, useUIStore } from "@/store";
 
-interface SidebarProps {
-    onUpgrade: () => void;
-}
-
-export const Sidebar = ({ onUpgrade }: SidebarProps) => {
+export const Sidebar = () => {
     const pathname = usePathname();
     const { isPro } = useUserStore();
-    const { isSidebarOpen, setSidebarOpen } = useUIStore();
+    const { isSidebarOpen, setSidebarOpen, setPricingModalOpen } = useUIStore();
 
     return (
         <>
@@ -104,7 +100,7 @@ export const Sidebar = ({ onUpgrade }: SidebarProps) => {
                         </div>
                         <p className="text-[10px] text-foreground/50 leading-tight font-medium">Unlock harmonic patterns & whale alerts.</p>
                         <button
-                            onClick={onUpgrade}
+                            onClick={() => setPricingModalOpen(true)}
                             className="w-full mt-4 bg-brand-primary text-white text-[10px] font-bold py-3 rounded-xl transition-all shadow-lg shadow-brand-primary/20 hover:opacity-90"
                         >
                             {isPro ? "Current: PRO" : "Upgrade Now"}

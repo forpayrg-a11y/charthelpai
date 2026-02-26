@@ -23,6 +23,8 @@ import { AnalysisResult } from "@/lib/gemini";
 import { motion, AnimatePresence } from "framer-motion";
 import { MarketTicker } from "@/components/ui/market-ticker";
 import { ProGate } from "@/components/ui/pro-gate";
+import { PricingModal } from "@/components/ui/pricing-modal";
+import { PricingCards } from "@/components/ui/pricing-cards";
 import { useUser } from "@clerk/nextjs";
 import { useUserStore } from "@/store";
 import { useSyncUser } from "@/hooks/use-user-sync";
@@ -45,11 +47,15 @@ export default function Home() {
     }
   }, []);
 
-  const handleUpgrade = async () => {
+  const handleUpgrade = async (priceId: string) => {
     if (isPro) return; // Already Pro
 
     try {
-      const response = await fetch("/api/checkout", { method: "POST" });
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ priceId })
+      });
       if (response.ok) {
         const { url } = await response.json();
         if (url) {
@@ -74,7 +80,7 @@ export default function Home() {
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground transition-colors duration-300">
       {/* Sidebar */}
-      <Sidebar onUpgrade={handleUpgrade} />
+      <Sidebar />
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden relative">
@@ -127,7 +133,7 @@ export default function Home() {
                       description={analysis.description}
                       patterns={analysis.patterns}
                     />
-                    <ProGate isPro={isPro} featureName="Harmonic Visualizations" onUpgrade={handleUpgrade}>
+                    <ProGate isPro={isPro} featureName="Harmonic Visualizations">
                       <LineChartAI
                         data={mockChartData}
                         sentiment={analysis.sentiment}
@@ -169,14 +175,31 @@ export default function Home() {
                 </div>
               )}
 
-              <ProGate isPro={isPro} featureName="Whale Alerts" onUpgrade={handleUpgrade}>
-                <WhaleAlerts />
-              </ProGate>
-
+              <WhaleAlerts />
             </aside>
+
           </div>
+
+
+          {!isPro && (
+            <section className="mt-16 lg:mt-24 mb-16 lg:mb-24">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl lg:text-5xl font-black italic tracking-tighter uppercase mb-4 leading-tight">
+                  Choose Your <span className="text-brand-primary">Edge</span>
+                </h2>
+                <p className="text-sm text-foreground/40 font-bold uppercase tracking-widest">
+                  Unlock the full potential of ChartHelp neural network.
+                </p>
+              </div>
+              <div className="max-w-4xl mx-auto">
+                <PricingCards onUpgrade={handleUpgrade} />
+              </div>
+            </section>
+          )}
+
           <Footer />
         </div>
+        <PricingModal onUpgrade={handleUpgrade} />
       </main>
     </div>
   );
