@@ -26,4 +26,5 @@ services:
       - STRIPE_PRO_YEARLY_PRICE_ID=${STRIPE_PRO_YEARLY_PRICE_ID}
       # Uygulama URL
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
+    command: sh -c "pnpm build && pnpm start"
     restart: always
