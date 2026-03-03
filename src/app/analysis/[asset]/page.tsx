@@ -57,7 +57,7 @@ export default function AnalysisPage({ params }: PageProps) {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
 
-            <Sidebar onUpgrade={() => { }} />
+            <Sidebar />
 
             <main className="flex-1 flex flex-col overflow-hidden relative">
                 <MarketTicker />
