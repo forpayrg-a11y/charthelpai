@@ -1,5 +1,14 @@
 services:
   app:
+    build:
+      context: .
+      args:
+        - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+        - NEXT_PUBLIC_CLERK_DOMAIN=${NEXT_PUBLIC_CLERK_DOMAIN}
+        - NEXT_PUBLIC_CLERK_SIGN_IN_URL=${NEXT_PUBLIC_CLERK_SIGN_IN_URL}
+        - NEXT_PUBLIC_CLERK_SIGN_UP_URL=${NEXT_PUBLIC_CLERK_SIGN_UP_URL}
+        - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+        - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
     image: mrgurpinar/charthelpai:latest
     ports:
       - "3003:3000"
@@ -26,5 +35,4 @@ services:
       - STRIPE_PRO_YEARLY_PRICE_ID=${STRIPE_PRO_YEARLY_PRICE_ID}
       # Uygulama URL
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
-    command: sh -c "pnpm build && pnpm start"
     restart: always
