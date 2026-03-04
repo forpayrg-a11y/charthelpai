@@ -47,7 +47,7 @@ export default function SettingsPage() {
 
     return (
         <div className="flex h-screen overflow-hidden bg-background text-foreground transition-colors duration-300">
-            <Sidebar onUpgrade={() => { }} />
+            <Sidebar />
 
             <main className="flex-1 flex flex-col overflow-hidden relative">
                 <MarketTicker />

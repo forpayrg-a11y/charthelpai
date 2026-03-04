@@ -26,7 +26,7 @@ export default function GlossaryPage({ params }: PageProps) {
 
     return (
         <div className="flex h-screen overflow-hidden bg-background text-foreground">
-            <Sidebar onUpgrade={() => { }} />
+            <Sidebar />
 
             <main className="flex-1 flex flex-col overflow-hidden relative">
                 <MarketTicker />
