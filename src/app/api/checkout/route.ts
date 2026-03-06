@@ -31,14 +31,27 @@ export async function POST(req: Request) {
         await connectToDatabase();
 
         let user = await User.findOne({ clerkId: userId });
+        const userEmail = clerkUser.emailAddresses[0].emailAddress;
 
         if (!user) {
-            user = await User.create({
-                clerkId: userId,
-                email: clerkUser.emailAddresses[0].emailAddress,
-                name: `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() || "Anonymous",
-                image: clerkUser.imageUrl,
-            });
+            // Check if user exists by email if clerkId lookup fails
+            user = await User.findOne({ email: userEmail });
+
+            if (user) {
+                // Update clerkId if we found the user by email
+                user.clerkId = userId;
+                user.name = `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() || user.name;
+                user.image = clerkUser.imageUrl || user.image;
+                await user.save();
+            } else {
+                // Create new user if no match found
+                user = await User.create({
+                    clerkId: userId,
+                    email: userEmail,
+                    name: `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() || "Anonymous",
+                    image: clerkUser.imageUrl,
+                });
+            }
         }
 
         // 1. If user doesn't have a stripe customer id, create one

@@ -40,14 +40,28 @@ export async function POST() {
 
         let user = await User.findOne({ clerkId: userId });
 
+        const userEmail = clerkUser.emailAddresses[0].emailAddress;
+
         if (!user) {
-            user = await User.create({
-                clerkId: userId,
-                email: clerkUser.emailAddresses[0].emailAddress,
-                name: `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() || "Anonymous",
-                image: clerkUser.imageUrl,
-                plan: "free",
-            });
+            // Check if user exists with the same email but different clerkId
+            user = await User.findOne({ email: userEmail });
+
+            if (user) {
+                // Update existing user with new clerkId
+                user.clerkId = userId;
+                user.name = `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() || user.name;
+                user.image = clerkUser.imageUrl || user.image;
+                await user.save();
+            } else {
+                // Create new user if not found by either clerkId or email
+                user = await User.create({
+                    clerkId: userId,
+                    email: userEmail,
+                    name: `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() || "Anonymous",
+                    image: clerkUser.imageUrl,
+                    plan: "free",
+                });
+            }
         }
 
         return NextResponse.json(user);
