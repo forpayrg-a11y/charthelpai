@@ -14,7 +14,7 @@ const PLANS = [
         name: "Pro Monthly",
         price: "$10",
         description: "Flexible access to all premium features.",
-        priceId: "price_1T529RDQs25Uuz0jOTdtZrne",
+        priceId: process.env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PRICE_ID || "",
         features: [
             "Real-time Whale Alerts",
             "Advanced Harmonic Patterns",
@@ -27,7 +27,7 @@ const PLANS = [
         name: "Pro Yearly",
         price: "$100",
         description: "Best value for dedicated traders.",
-        priceId: "price_1T529RDQs25Uuz0jb8e2EYLH",
+        priceId: process.env.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PRICE_ID || "",
         features: [
             "Everything in Monthly",
             "2 Months for FREE",
