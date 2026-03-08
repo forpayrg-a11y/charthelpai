@@ -18,14 +18,33 @@ import { motion } from "framer-motion";
 import {
     useUser
 } from "@clerk/nextjs";
-import { useUserStore } from "@/store";
+import { useUserStore, useUIStore } from "@/store";
 import { useSyncUser } from "@/hooks/use-user-sync";
+import { PricingModal } from "@/components/ui/pricing-modal";
 
 export default function SettingsPage() {
     useSyncUser();
     const { user: clerkUser } = useUser();
     const { isPro, setUser } = useUserStore();
+    const { setPricingModalOpen } = useUIStore();
     const [loadingPortal, setLoadingPortal] = useState(false);
+
+    const handleUpgrade = async (priceId: string) => {
+        if (isPro) return;
+        try {
+            const response = await fetch("/api/checkout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ priceId })
+            });
+            if (response.ok) {
+                const { url } = await response.json();
+                if (url) window.location.href = url;
+            }
+        } catch (error) {
+            console.error("Error initiating checkout:", error);
+        }
+    };
 
     const handleManageBilling = async () => {
         setLoadingPortal(true);
@@ -139,7 +158,7 @@ export default function SettingsPage() {
                                                 <ExternalLink className="w-3 h-3" />
                                             </button>
                                         ) : (
-                                            <button className="px-6 py-3 bg-brand-primary text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-all shadow-lg shadow-brand-primary/20">
+                                            <button onClick={() => setPricingModalOpen(true)} className="px-6 py-3 bg-brand-primary text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-all shadow-lg shadow-brand-primary/20">
                                                 Upgrade to PRO
                                             </button>
                                         )}
@@ -196,6 +215,7 @@ export default function SettingsPage() {
                     </div>
                 </div>
             </main>
+            <PricingModal onUpgrade={handleUpgrade} />
         </div>
     );
 }

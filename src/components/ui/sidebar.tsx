@@ -59,8 +59,8 @@ export const Sidebar = ({ onUpgrade }: SidebarProps) => {
                             )}
                         </div>
                         <div>
-                            <h1 className="text-xl font-black italic tracking-tighter leading-none">
-                                CHART<span className="text-brand-primary">HELP</span>
+                            <h1 className="text-xl font-roboto font-black italic tracking-tighter leading-none">
+                                ChartHelp <span className="text-brand-primary">AI</span>
                             </h1>
                             <p className="text-[8px] font-black tracking-[0.2em] text-foreground/40 uppercase">Neural Scanner</p>
                         </div>

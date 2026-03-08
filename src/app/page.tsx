@@ -77,8 +77,33 @@ export default function Home() {
     price: 50000 + Math.random() * 5000
   }));
 
+  // SEO Strategy: JSON-LD (Schema.org)
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": ["SoftwareApplication", "Organization"],
+    "name": "ChartHelp AI",
+    "url": "https://charthelpai.com",
+    "logo": "https://charthelpai.com/favicon-192x192.png",
+    "description": "Advanced AI-powered technical analysis and trade planning for traders.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "author": {
+      "@type": "Organization",
+      "name": "Gorvu LLC"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    }
+  };
+
   return (
     <div className="flex h-screen overflow-hidden bg-background text-foreground transition-colors duration-300">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Sidebar */}
       <Sidebar />
 
